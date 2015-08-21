@@ -1,3 +1,7 @@
+# =========================
+# Java
+# =========================
+
 *.class
 
 # Mobile Tools for Java (J2ME)
@@ -8,8 +12,19 @@
 *.war
 *.ear
 
+# Generated Files
+bin\
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# =========================
+# Eclipse
+# =========================
+
+.classpath
+.settings/org.eclipse.jdt.core.prefs
+*.project
 
 # =========================
 # Operating System Files
@@ -55,8 +70,5 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
-# Windows shortcuts
+# Windows Shortcuts
 *.lnk
-.classpath
-.settings/org.eclipse.jdt.core.prefs
-*.project
