@@ -37,6 +37,7 @@ public class Main
 				}
 				quickSort(array, 0, array.length - 1);
 				System.out.println(Arrays.toString(array));
+				System.out.println(pivotCount);
 			}
 		}
 		finally
@@ -57,12 +58,12 @@ public class Main
 	public static void quickSort(int[] array, int start, int end)
 	{
 		// base case = single index is already sorted
-		if(start >= end)
+		if(end <= start)
 		{	
 			return;
-		}
+		}	
         int pivotIndex = partition(array, start, end); // get last pivot
-        quickSort(array, start, pivotIndex); // sort left of pivot
+        quickSort(array, start, pivotIndex - 1); // sort left of pivot
         quickSort(array, pivotIndex + 1, end); // sort right of pivot
 	}
 	/**
@@ -77,12 +78,8 @@ public class Main
 	 */
 	public static int partition(int[] array, int start, int end)
 	{
-		// only increment pivot if there is more than one index
-		// to "partition" (single index IS NOT a pivot)
-		if(end - start >= 1)
-		{
-			pivotCount++;
-		}
+		pivotCount++;
+
 		int pivot = array[start]; // choose first index as pivot
 		// only go until start and end indices meet
 		while(start < end)
@@ -101,6 +98,7 @@ public class Main
 			// (lower val to right, higher to left of pivot)
 			swap(array, start, end);
 		}
+		
 		return start;
 	}
 	public static void swap(int[] array, int i, int j)
