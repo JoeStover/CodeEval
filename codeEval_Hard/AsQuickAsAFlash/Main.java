@@ -7,12 +7,6 @@ import java.util.Arrays;
  * 
  * https://www.codeeval.com/open_challenges/239/
  * 
- * @Todo: Challenge is unclear on pivot choice / partition scheme
- *        being used, which greatly affects number of pivots per
- *        quicksort. Need to keep tweaking until I find their 
- *        implementation choice, as I only have 70% completion at the
- *        moment; however, I do pass all of their initial test input.
- * 
  * @author Joe Stover
  * @version May 16, 2016
  */
