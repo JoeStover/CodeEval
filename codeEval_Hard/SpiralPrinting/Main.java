@@ -46,8 +46,6 @@ public class Main
 		int colSize = Integer.parseInt(parts[1]);
 		String[] array = parts[2].split(" ");
 		String[][] matrix = buildMatrix(array, rowSize, colSize);
-		printMatrix(matrix); // TODO: remove once debugged
-		System.out.println(); // TODO: remove once debugged
 		sprialPrintMatrix(matrix);		
 	}
 	/**
@@ -132,7 +130,8 @@ public class Main
 				row--;
 				hasMoved = true;
 			}
-			row++; // move row back in bounds			
+			row++; // move row back in bounds	
+			col++; // corner printed, move right
 		}	
 		System.out.println(); // new line
 	}
