@@ -8,10 +8,15 @@ import java.io.*;
  * 
  * https://www.codeeval.com/open_challenges/53/
  * 
- * Note: This approach will not pass instances where
- *       the repeated string overlaps. Need to rework 
- *       algorithm. This is a simple first attempt based
- *       on reviewing pseudocode examples from Stanford.
+ * Note: First approach used suffix array and sort to 
+ *       place those suffixes near each other for efficiency.
+ *       Unfortunately, it breaks for the "substrings cannot
+ *       overlap" constraint, and I was unsure how to broach that
+ *       and keep the suffix tree.
+ *       
+ *       This approach is far less efficient, but covers that
+ *       constraint. Will refactor again when I have time to
+ *       cover suffix tree PLUS no overlap.
  * 
  * @author Joe Stover
  * @version June 23, 2016
@@ -27,7 +32,7 @@ public class Main
 			reader = generateInputReader(args);
 			while((line = reader.readLine()) != null)
 			{
-				System.out.println(longestRepeatedString(line));
+				System.out.println((repeatedSubstring(line)));
 			}
 		}
 		finally
@@ -35,54 +40,46 @@ public class Main
 			reader.close();
 		}
 	}
-    /**
-     * Gets the longest prefix common to 2 strings.
-     * 
-     * @param s1 first string prefix to be compared
-     * @param s2 second string prefix to be compared
-     * @return String longest prefix common to both String inputs
-     */
-    public static String longestCommonPrefix(String s1, String s2)
+    public static String repeatedSubstring(String line)
     {
-    	// determine shortest string for iteration purposes
-    	int minLength = Math.min(s1.length(), s2.length());
-    	for(int i = 0; i < minLength; i++)
-    	{
-    		// upon mismatch, return previous matches
-    		if(s1.charAt(i) != s2.charAt(i))
-    		{
-    			return s1.substring(0, i);
-    		}
-    	}
-    	// strings match, so just return min
-    	return s1.substring(0, minLength);
-    }
-    /**
-     * Finds the longest repeated substring in a given string.
-     * 
-     * @param line String to be searched
-     * @return longest repeating substring, 
-     * 		   or NONE if no such substring exists
-     */
-    public static String longestRepeatedString(String line)
-    {
-    	// holds a list of suffixes to compare
-    	String[] suffixes = new String[line.length()];
-    	for(int i = 0; i < line.length(); i++)
-    	{
-    		suffixes[i] = line.substring(i, line.length());
-    	}
-    	// sort suffixes to place potential matches near each other 
-    	// then compare
-    	Arrays.sort(suffixes);
     	String longestRepeat = "";
-    	for(int i = 0; i < suffixes.length - 1; i++)
+    	// get 1/2 the string for a partition to iterate through
+    	// accounting for odd length
+    	int partition = (line.length() / 2) + (line.length() % 2);    
+    	// set boundaries  
+    	for(int i = 0; i < partition; i++)
     	{
-    		String temp = longestCommonPrefix(suffixes[i], suffixes[i + 1]);
-    		if(temp.length() > longestRepeat.length())
-    		{
-    			longestRepeat = temp;
-    		}
+    		// iterate through current boundaries
+    		for(int j = i; j <= partition; j++)
+        	{
+        		// check left
+        		String leftSub = line.substring(i, j);
+        		String leftTest = line.substring(j);
+        		if(leftTest.contains(leftSub))
+        		{
+        			// make sure our sub is larger than current and not
+        			// all spaces
+        			if(leftSub.length() > longestRepeat.length() &&
+        					!leftSub.trim().isEmpty())
+        			{
+        				longestRepeat = leftSub;
+        			}
+        		}
+        		// check right
+        		String rightSub = line.substring(line.length() - 1 - j, 
+        				line.length() - 1);
+        		String rightTest = line.substring(0, line.length() - 1 - j);
+        		if(rightTest.contains(rightSub))
+        		{
+        			// make sure our sub is larger than current and not
+        			// all spaces
+        			if(rightSub.length() > longestRepeat.length() &&
+        					!rightSub.trim().isEmpty())
+        			{
+        				longestRepeat = rightSub;
+        			}
+        		}
+        	}
     	}
     	return (longestRepeat.trim().isEmpty()) ? "NONE" : longestRepeat;
     }
