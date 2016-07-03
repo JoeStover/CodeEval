@@ -1,7 +1,6 @@
 package TwentyFortyEight;
 
 import java.io.*;
-import java.util.*;
 
 /**
  * Twenty Forty Eight / Challenge 194 / Moderate
@@ -34,7 +33,7 @@ public class Main
 				String shiftDir = parts[0];
 				int gridSize = Integer.parseInt(parts[1]);
 				String gridData = parts[2];
-				ArrayList<ArrayList<Tile>> gameBoard = 
+				Tile[][] gameBoard = 
 						createGameBoard(gridSize, gridData);
 				processMove(gameBoard, shiftDir);
 				System.out.println(boardToString(gameBoard));
@@ -50,21 +49,20 @@ public class Main
 	 * 
 	 * @param size integer representing the game board dimensions
 	 * @param input string representing current tiles to be placed on the board
-	 * @return 2d matrix representing the game board presented as nested ArrayLists
+	 * @return 2d matrix representing the game board 
 	 */
-	public static ArrayList<ArrayList<Tile>> createGameBoard(int size, 
+	public static Tile[][] createGameBoard(int size, 
 			String input)
 	{
-		ArrayList<ArrayList<Tile>> gameBoard = 
-				new ArrayList<ArrayList<Tile>>();
+		Tile[][] gameBoard = 
+				new Tile[size][size];
 		String[] rows = input.split("\\|");
 		for(int row = 0; row < size; row++)
 		{
-			gameBoard.add(new ArrayList<Tile>());
-			String[] tiles = rows[row].split(" ");
-			for(String tile : tiles)
+			String[] temp = rows[row].split(" ");
+			for(int col = 0; col < size; col++)
 			{
-				gameBoard.get(row).add(new Tile(Integer.parseInt(tile)));
+				gameBoard[row][col] = new Tile(Integer.parseInt(temp[col]));
 			}
 		}	
 		return gameBoard;
@@ -72,10 +70,10 @@ public class Main
 	/**
 	 * Processes one move in the 2048 game.
 	 * 
-	 * @param board nested arraylist representing a 2048 board
+	 * @param 2d array representing a 2048 board
 	 * @param dir the direction of the move
 	 */
-	public static void processMove(ArrayList<ArrayList<Tile>> board, 
+	public static void processMove(Tile[][] board, 
 			String dir)
 	{
 		if(dir.equals("RIGHT"))
@@ -99,31 +97,19 @@ public class Main
 	 * Moves all tiles to the right, conforming to the 2048 rules specified
 	 * in the challenge description.
 	 * 
-	 * @param board nested arraylist representing a 2048 board
+	 * @param board 2d array representing a 2048 board
 	 */
-	public static void shiftRight(ArrayList<ArrayList<Tile>> board)
+	public static void shiftRight(Tile[][] board)
 	{
-		for(int row = 0; row < board.size(); row++)
-		{
-			ArrayList<Tile> temp = board.get(row);
-			for(int col = temp.size() - 2; col >= 0; col--)
-			{
-				int i = 1;
-				// ignore empty space
-				if(temp.get(col).value != 0)
-				{	
-					
-				}
-			}
-		}
+		
 	}
 	/**
 	 * Moves all tiles to the left, conforming to the 2048 rules specified
 	 * in the challenge description.
 	 * 
-	 * @param board nested arraylist representing a 2048 board
+	 * @param board 2d array representing a 2048 board
 	 */
-	public static void shiftLeft(ArrayList<ArrayList<Tile>> board)
+	public static void shiftLeft(Tile[][] board)
 	{
 		
 	}
@@ -131,9 +117,9 @@ public class Main
 	 * Moves all tiles up, conforming to the 2048 rules specified
 	 * in the challenge description.
 	 * 
-	 * @param board nested arraylist representing a 2048 board
+	 * @param board 2d array representing a 2048 board
 	 */
-	public static void shiftUp(ArrayList<ArrayList<Tile>> board)
+	public static void shiftUp(Tile[][] board)
 	{
 		
 	}
@@ -141,28 +127,26 @@ public class Main
 	 * Moves all tiles down, conforming to the 2048 rules specified
 	 * in the challenge description.
 	 * 
-	 * @param board nested arraylist representing a 2048 board
+	 * @param board 2d array representing a 2048 board
 	 */
-	public static void shiftDown(ArrayList<ArrayList<Tile>> board)
+	public static void shiftDown(Tile[][] board)
 	{
 		
 	}
 	/**
 	 * Converts the 2048 board into a string representation for printing.
 	 * 
-	 * @param board nested arraylist representing a 2048 board
+	 * @param board 2d array representing a 2048 board
 	 * @return a String representing the 2048 board
 	 */
-	public static String boardToString(
-			ArrayList<ArrayList<Tile>> board)
+	public static String boardToString(Tile[][] board)
 	{
 		String postMove = "";
-		for(int row = 0; row < board.size(); row++)
+		for(int row = 0; row < board.length; row++)
 		{
-			ArrayList<Tile> temp = board.get(row);
-			for(Tile tile : temp)
+			for(int col = 0; col < board[row].length; col++)
 			{
-				postMove += tile.value + " ";
+				postMove += board[row][col].value + " ";
 			}
 			postMove = postMove.trim() + "|";
 		}
