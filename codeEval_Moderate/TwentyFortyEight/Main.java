@@ -10,8 +10,6 @@ import java.io.*;
  * @author Joe Stover
  * @version July 05, 2016
  * 
- * TODO: Only getting 80% on CodeEval. Need to update input.txt for
- * each direction and multiple edge cases to see what the issue is.
  */
 public class Main 
 {
@@ -111,7 +109,7 @@ public class Main
 					if(row[currCol].value != 0)
 					{
 						// next tile has already been combined
-						if(row[currCol + 1].hasMerged)
+						if(row[currCol + 1].hasMerged || row[currCol].hasMerged)
 						{
 							done = true;
 						}
@@ -165,7 +163,7 @@ public class Main
 					if(row[currCol].value != 0)
 					{
 						// next tile is combined already
-						if(row[currCol - 1].hasMerged)
+						if(row[currCol - 1].hasMerged || row[currCol].hasMerged)
 						{
 							done = true;
 						}
@@ -219,7 +217,8 @@ public class Main
 					if(board[currRow][col].value != 0)
 					{
 						// next tile has already been combined
-						if(board[currRow - 1][col].hasMerged)
+						if(board[currRow - 1][col].hasMerged || 
+								board[currRow][col].hasMerged)
 						{
 							done = true;
 						}
@@ -274,7 +273,8 @@ public class Main
 					if(board[currRow][col].value != 0)
 					{
 						// next tile has already been combined
-						if(board[currRow + 1][col].hasMerged)
+						if(board[currRow + 1][col].hasMerged || 
+								board[currRow][col].hasMerged)
 						{
 							done = true;
 						}
