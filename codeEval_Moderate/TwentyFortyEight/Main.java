@@ -8,15 +8,10 @@ import java.io.*;
  * https://www.codeeval.com/open_challenges/194/
  * 
  * @author Joe Stover
- * @version still working on it (not submitted to CodeEval yet)
+ * @version July 05, 2016
  * 
- * TODO: Fix the merge right logic and use that to complete the other "shift"
- *       methods. Previous attempts failed at the merge logic. Just need to 
- *       spend some more time working out the kinks. Removed previous attempt
- *       at merge right to get a fresh start.
- *       
- *       Added the Tile inner class to keep track of whether a tile
- *       has already been "merged."
+ * TODO: Only getting 80% on CodeEval. Need to update input.txt for
+ * each direction and multiple edge cases to see what the issue is.
  */
 public class Main 
 {
@@ -101,7 +96,51 @@ public class Main
 	 */
 	public static void shiftRight(Tile[][] board)
 	{
-		
+		int rightEdge = board.length - 1;
+		for(Tile[] row : board)
+		{
+			// start at destination (right edge) and work back
+			for(int col = rightEdge - 1; col >= 0; col--)
+			{
+				int currCol = col;
+				boolean done = false;
+				// keep going until finished or hit edge
+				while(!done && currCol < rightEdge) 
+				{
+					// can ignore if this tile is empty
+					if(row[currCol].value != 0)
+					{
+						// next tile has already been combined
+						if(row[currCol + 1].hasMerged)
+						{
+							done = true;
+						}
+						// next tile is empty (swap)
+						else if(row[currCol + 1].value == 0)
+						{
+							Tile temp = row[currCol];
+							row[currCol] = row[currCol + 1];
+							row[currCol + 1] = temp;
+						}						
+						// next tile is a match
+						else if(row[currCol].value == row[currCol + 1].value)
+						{
+							row[currCol + 1].value *= 2;
+							row[currCol + 1].hasMerged = true;
+							row[currCol] = new Tile(0);
+							done = true;
+							
+						}					
+						// next tile is not a match
+						else
+						{
+							done = true;
+						}
+					}					
+					currCol++;
+				}
+			}
+		}
 	}
 	/**
 	 * Moves all tiles to the left, conforming to the 2048 rules specified
@@ -111,7 +150,51 @@ public class Main
 	 */
 	public static void shiftLeft(Tile[][] board)
 	{
-		
+		int rightEdge = board.length - 1;
+		for(Tile[] row : board)
+		{
+			// start at destination (left side) and work back
+			for(int col = 1; col <= rightEdge; col++)
+			{
+				int currCol = col;
+				boolean done = false;
+				// keep going til done or hit the edge
+				while(!done && currCol > 0)
+				{
+					// can ignore if this tile is empty
+					if(row[currCol].value != 0)
+					{
+						// next tile is combined already
+						if(row[currCol - 1].hasMerged)
+						{
+							done = true;
+						}
+						// next tile is empty (swap)
+						else if(row[currCol - 1].value == 0)
+						{
+							Tile temp = row[currCol];
+							row[currCol] = row[currCol - 1];
+							row[currCol - 1] = temp;
+						}
+						// next tile is a match
+						else if(row[currCol].value == row[currCol - 1].value)
+						{
+							row[currCol - 1].value *= 2;
+							row[currCol - 1].hasMerged = true;
+							row[currCol] = new Tile(0);
+							done = true;							
+						}
+						// next tile not a match
+						else
+						{
+							done = true;
+						}
+					}
+					currCol--;
+				}
+				
+			}
+		}
 	}
 	/**
 	 * Moves all tiles up, conforming to the 2048 rules specified
@@ -121,6 +204,51 @@ public class Main
 	 */
 	public static void shiftUp(Tile[][] board)
 	{
+		int bottomEdge = board[0].length - 1;
+		for(int col = 0; col < board[0].length; col++)
+		{
+			// start at destination (top edge) and work back
+			for(int row = 1; row <= bottomEdge; row++)
+			{
+				int currRow = row;
+				boolean done = false;
+				// keep going until finished or hit edge
+				while(!done && currRow > 0)
+				{
+					// can ignore if this tile is empty
+					if(board[currRow][col].value != 0)
+					{
+						// next tile has already been combined
+						if(board[currRow - 1][col].hasMerged)
+						{
+							done = true;
+						}
+						// next tile is empty (swap)
+						else if(board[currRow - 1][col].value == 0)
+						{
+							Tile temp = board[currRow][col];
+							board[currRow][col] = board[currRow - 1][col];
+							board[currRow - 1][col] = temp;
+						}
+						// next tile is a match
+						else if(board[currRow][col].value == 
+								board[currRow - 1][col].value)
+						{
+							board[currRow - 1][col].value *= 2;
+							board[currRow - 1][col].hasMerged = true;
+							board[currRow][col] = new Tile(0);
+							done = true;
+						}
+						// next tile is not a match
+						else
+						{
+							done = true;
+						}
+					}
+					currRow--;
+				}
+			}
+		}
 		
 	}
 	/**
@@ -131,7 +259,51 @@ public class Main
 	 */
 	public static void shiftDown(Tile[][] board)
 	{
-		
+		int bottomEdge = board[0].length - 1;
+		for(int col = 0; col < board[0].length; col++)
+		{
+			// start at destination (bottom edge) and work back
+			for(int row = bottomEdge - 1; row >= 0; row--)
+			{
+				int currRow = row;
+				boolean done = false;
+				// keep going until finished or hit edge
+				while(!done && currRow < bottomEdge)
+				{
+					// can ignore if this tile is empty
+					if(board[currRow][col].value != 0)
+					{
+						// next tile has already been combined
+						if(board[currRow + 1][col].hasMerged)
+						{
+							done = true;
+						}
+						// next tile is empty (swap)
+						else if(board[currRow + 1][col].value == 0)
+						{
+							Tile temp = board[currRow][col];
+							board[currRow][col] = board[currRow + 1][col];
+							board[currRow + 1][col] = temp;
+						}
+						// next tile is a match
+						else if(board[currRow][col].value == 
+								board[currRow + 1][col].value)
+						{
+							board[currRow + 1][col].value *= 2;
+							board[currRow + 1][col].hasMerged = true;
+							board[currRow][col] = new Tile(0);
+							done = true;
+						}
+						// next tile is not a match
+						else
+						{
+							done = true;
+						}
+					}
+					currRow++;
+				}
+			}
+		}
 	}
 	/**
 	 * Converts the 2048 board into a string representation for printing.
